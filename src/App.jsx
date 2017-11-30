@@ -10,22 +10,18 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: ""},
-      messages: [
-        {
-          id: "1",
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-        {
-          id: "2",
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        }
-      ]
+      messages: []
     }
+  }
+  newMessageHandler(receivedContent) {
+    const newMessage = {id: Math.random(), username: "Michelle", content: receivedContent};
+    const messages = this.state.messages.concat(newMessage)
+    this.setState({messages: messages})
   }
 
   componentDidMount() {
+    this.socket = new WebSocket("ws://localhost:3001");
+    console.log("Connected to server.");
     console.log("componentDidMount <App />");
     setTimeout(() => {
       console.log("Simulating incoming message");
@@ -42,7 +38,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages = { this.state.messages }/>
-        <ChatBar/>
+        <ChatBar onNewMessage = { this.newMessageHandler.bind(this) } />
       </div>
     )
   }
