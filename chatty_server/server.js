@@ -13,14 +13,31 @@ wss.on("connection", function connection(ws) {
   // Event listener
   ws.on("message", function(data) {
     console.log(data);
+
     wss.clients.forEach(function (client) {
       client.send(data);
     });
+
     let notification = JSON.parse(data);
+    let serverResponse = {};
+
     if (notification.type === 'postMessage') {
       console.log(`User ${notification.username} said: \"${notification.content}\"`);
+
     } else if (notification.type === 'postNotification') {
-      console.log(`User ${notification.username} is now known as ${notification.content}`);
+      console.log('Notification content:', notification.content);
+      serverResponse = {
+        type: 'incomingNotification',
+        id: Math.random(),
+        content: notification.content
+      };
     }
+
+    let chatroomNotice = JSON.stringify(serverResponse);
+    wss.clients.forEach(function each(client) {
+      if (client.readyState === ws.OPEN) {
+        client.send(chatroomNotice);
+      }
+    });
   });
 });

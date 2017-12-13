@@ -14,8 +14,13 @@ class App extends Component {
     }
     this.changeName = this.changeName.bind(this);
   }
-  newMessageHandler(receivedContent) {
-    const newMessage = {id: Math.random(), username: this.state.currentUser.name, content: receivedContent, type: 'postMessage'};
+  newMessageHandler(userInput) {
+    const newMessage = {
+      id: Math.random(),
+      username: this.state.currentUser.name,
+      content: userInput,
+      type: 'postMessage'
+    };
     this.socket.send(JSON.stringify(newMessage));
   }
 
@@ -29,6 +34,11 @@ class App extends Component {
   }
 
   changeName(newName) {
+    const notification = {
+      type: 'postNotification',
+      content: (this.state.currentUser.name, "is now known as", newName)
+      };
+    this.socket.send(JSON.stringify(notification));
     this.setState({
       currentUser: {name: newName}
     })
@@ -42,8 +52,10 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages}/>
-        <ChatBar onNewMessage={this.newMessageHandler.bind(this)} username={this.state.currentUser}
-        changename={this.changeName} />
+        <ChatBar
+          onNewMessage={this.newMessageHandler.bind(this)}
+          username={this.state.currentUser}
+          changename={this.changeName} />
       </div>
     )
   }

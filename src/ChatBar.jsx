@@ -9,17 +9,15 @@ class ChatBar extends Component {
     }
   }
 
-  // inputMessage(input)
-
   enterMessage(input) {
     if (input.key == "Enter") {
       this.props.onNewMessage(input.target.value);
     }
   }
 
-  onUsernameChange = (event) => {
-    if (event.target.value) {
-      this.props.changename(event.target.value);
+  onUsernameChange = (input) => {
+    if (input.target.value) {
+      this.props.changename(input.target.value);
       return;
     }
   }
