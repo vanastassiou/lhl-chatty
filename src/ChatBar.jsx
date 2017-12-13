@@ -15,7 +15,7 @@ class ChatBar extends Component {
     }
   }
 
-  onUsernameChange = (input) => {
+  handleChange = (input) => {
     if (input.target.value) {
       this.props.changename(input.target.value);
       return;
@@ -26,8 +26,8 @@ class ChatBar extends Component {
     console.log("Rendering ChatBar.jsx");
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" placeholder={this.props.username.name} onBlur={this.onUsernameChange}/>
-        <input className="chatbar-message" onKeyPress={this.enterMessage.bind(this)} placeholder="Type a message and hit ENTER" />
+        <input className="chatbar-username" placeholder={this.props.username.name} onBlur={this.handleChange}/>
+        <input className="chatbar-message" placeholder="Type a message and hit ENTER" onKeyPress={this.enterMessage.bind(this)} />
       </footer>
     )
   }

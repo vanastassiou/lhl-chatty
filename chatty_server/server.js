@@ -10,7 +10,9 @@ const wss = new SocketServer({ server });
 
 wss.on("connection", function connection(ws) {
   console.log("Client connected.");
-  // Event listener
+
+  broadcastOnlineUsers();
+
   ws.on("message", function(data) {
     console.log(data);
 
@@ -39,5 +41,18 @@ wss.on("connection", function connection(ws) {
         client.send(chatroomNotice);
       }
     });
+
+  ws.on('close', () => {
+    console.log('A client has disconnected.');
+    broadcastOnlineUsers();
   });
 });
+
+function broadcastOnlineUsers() {
+  const onlineUsers = {
+    id: math.Random(),
+    content: String(wss.clients.size),
+    type: 'onlineUsers'
+  };
+  broadcast(onlineUsers);
+}
