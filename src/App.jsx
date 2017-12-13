@@ -20,11 +20,11 @@ class App extends Component {
 
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
-    this.socket.onmessage = (message) => {
-    const newMessage = JSON.parse(message.data);
-    const messages = this.state.messages.concat(newMessage)
-    this.setState({messages: messages})
-  };
+      this.socket.onmessage = (message) => {
+      const newMessage = JSON.parse(message.data);
+      const messages = this.state.messages.concat(newMessage)
+      this.setState({messages: messages})
+    };
   }
 
   render() {
