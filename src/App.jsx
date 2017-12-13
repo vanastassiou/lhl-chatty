@@ -14,6 +14,8 @@ class App extends Component {
     }
     this.changeName = this.changeName.bind(this);
   }
+
+
   newMessageHandler(userInput) {
     const newMessage = {
       id: Math.random(),
@@ -21,24 +23,27 @@ class App extends Component {
       content: userInput,
       type: 'postMessage'
     };
+    console.log("New message handler:", newMessage.content);
     this.socket.send(JSON.stringify(newMessage));
   }
+
 
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
       this.socket.onmessage = (message) => {
       const newMessage = JSON.parse(message.data);
       const messages = this.state.messages.concat(newMessage)
+      console.log("componentDidMount");
       this.setState({messages: messages})
     }
   }
+
 
   changeName(newName) {
     const notification = {
       type: 'postNotification',
       content: `${this.state.currentUser.name} is now known as ${newName}`
       };
-    console.log("Notification content =", notification.content);
     this.socket.send(JSON.stringify(notification));
     console.log("Changing name to", newName);
     this.setState({
@@ -53,7 +58,9 @@ class App extends Component {
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
-        <MessageList messages={this.state.messages}/>
+        <MessageList
+          messages={this.state.messages}
+        />
         <ChatBar
           onNewMessage={this.newMessageHandler.bind(this)}
           username={this.state.currentUser}

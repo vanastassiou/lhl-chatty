@@ -23,14 +23,8 @@ wss.on("connection", function connection(ws) {
 
     if (notification.type === 'postMessage') {
       console.log(`User ${notification.username} said: \"${notification.content}\"`);
-
     } else if (notification.type === 'postNotification') {
-      console.log('Notification content:', notification.content);
-      serverResponse = {
-        type: 'incomingNotification',
-        id: Math.random(),
-        content: notification.content
-      };
+      console.log(notification.content);
     }
 
     let chatroomNotice = JSON.stringify(serverResponse);
