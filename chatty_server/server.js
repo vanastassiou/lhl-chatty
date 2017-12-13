@@ -16,5 +16,11 @@ wss.on("connection", function connection(ws) {
     wss.clients.forEach(function (client) {
       client.send(data);
     });
+    let notification = JSON.parse(data);
+    if (notification.type === 'postMessage') {
+      console.log(`User ${notification.username} said: \"${notification.content}\"`);
+    } else if (notification.type === 'postNotification') {
+      console.log(`User ${notification.username} is now known as ${notification.content}`);
+    }
   });
 });

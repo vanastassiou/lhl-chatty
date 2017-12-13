@@ -15,7 +15,7 @@ class App extends Component {
     this.changeName = this.changeName.bind(this);
   }
   newMessageHandler(receivedContent) {
-    const newMessage = {id: Math.random(), username: this.state.currentUser.name, content: receivedContent};
+    const newMessage = {id: Math.random(), username: this.state.currentUser.name, content: receivedContent, type: 'postMessage'};
     this.socket.send(JSON.stringify(newMessage));
   }
 
