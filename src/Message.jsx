@@ -11,6 +11,7 @@ class Message extends Component {
   }
 
   render() {
+    console.log("Rendering Message.jsx");
     return (
       <main className="messages">
         <div className="message">
