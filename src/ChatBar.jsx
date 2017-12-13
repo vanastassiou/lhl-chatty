@@ -17,14 +17,21 @@ class ChatBar extends Component {
     }
   }
 
+  onUsernameChange = (event) => {
+    if (event.target.value) {
+      this.props.changename(event.target.value);
+      return;
+    }
+  }
+
   render() {
     console.log("Rendering ChatBar.jsx");
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" placeholder="Your Name (Optional)" />
+        <input className="chatbar-username" placeholder={this.props.username.name} onBlur={this.onUsernameChange}/>
         <input className="chatbar-message" onKeyPress={this.enterMessage.bind(this)} placeholder="Type a message and hit ENTER" />
       </footer>
-    );
+    )
   }
 }
 

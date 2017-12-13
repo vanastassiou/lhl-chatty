@@ -9,12 +9,13 @@ class App extends Component {
   constructor(props)  {
     super(props);
     this.state = {
-      currentUser: {name: ""},
+      currentUser: {name: "Anon"},
       messages: []
     }
+    this.changeName = this.changeName.bind(this);
   }
   newMessageHandler(receivedContent) {
-    const newMessage = {id: Math.random(), username: "Michelle", content: receivedContent};
+    const newMessage = {id: Math.random(), username: this.state.currentUser.name, content: receivedContent};
     this.socket.send(JSON.stringify(newMessage));
   }
 
@@ -24,7 +25,13 @@ class App extends Component {
       const newMessage = JSON.parse(message.data);
       const messages = this.state.messages.concat(newMessage)
       this.setState({messages: messages})
-    };
+    }
+  }
+
+  changeName(newName) {
+    this.setState({
+      currentUser: {name: newName}
+    })
   }
 
   render() {
@@ -34,8 +41,9 @@ class App extends Component {
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
-        <MessageList messages = { this.state.messages }/>
-        <ChatBar onNewMessage = { this.newMessageHandler.bind(this) } />
+        <MessageList messages={this.state.messages}/>
+        <ChatBar onNewMessage={this.newMessageHandler.bind(this)} username={this.state.currentUser}
+        changename={this.changeName} />
       </div>
     )
   }
