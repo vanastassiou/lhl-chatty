@@ -11,12 +11,6 @@ A realtime chatroom exercise intended to further knowledge of React.
 4. In a new terminal tab/window, `cd` to `chatty_server` and run `npm start`
 5. Browse to http://localhost:3000, or http://0.0.0.0:3000 if running from a Lighthouse Labs Vagrant machine
 
-### Static Files
-
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
 ### Linting
 
 This boilerplate project includes React ESLint configuration.
