@@ -20,7 +20,8 @@ wss.on('connection', function connection(ws) {
   console.log('Client connected.');
   usersInChat += 1;
   broadcastServerMessage({
-    type: 'updateUsersInChat',
+    type: 'incomingMessage',
+    id: Math.random(),
     userNumber: usersInChat
   });
 
@@ -28,13 +29,14 @@ wss.on('connection', function connection(ws) {
     console.log('Client disconnected');
     usersInChat -= 1;
     broadcastServerMessage({
-      type: 'updateUsersInChat',
+      type: 'incomingMessage',
+      id: Math.random(),
       userNumber: usersInChat
     });
   });
 
   // Event listener
-  ws.on("message", function(data) {
+  ws.on('message', function(data) {
     console.log(data);
 
     wss.clients.forEach(function (client) {
@@ -42,12 +44,11 @@ wss.on('connection', function connection(ws) {
     });
 
     let notification = JSON.parse(data);
-    let serverResponse = {};
-
     if (notification.type === 'postMessage') {
       console.log(`User ${notification.username} said: \"${notification.content}\"`);
     } else if (notification.type === 'postNotification') {
       console.log(notification.content);
+      broadcastServerMessage(notification.content);
     };
   });
 });
