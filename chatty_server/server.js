@@ -9,10 +9,6 @@ const server = express()
 
 const wss = new SocketServer({ server });
 let usersInChat = 0;
-let serverResponse = {
-  type: 'updateUsersInChat',
-  userNumber: usersInChat
-};
 
 // Client connection handler
 
@@ -20,7 +16,7 @@ wss.on('connection', function connection(ws) {
   console.log('Client connected.');
   usersInChat += 1;
   broadcastServerMessage({
-    type: 'incomingMessage',
+    type: 'updateUsersInChat',
     id: Math.random(),
     userNumber: usersInChat
   });
@@ -29,7 +25,7 @@ wss.on('connection', function connection(ws) {
     console.log('Client disconnected');
     usersInChat -= 1;
     broadcastServerMessage({
-      type: 'incomingMessage',
+      type: 'updateUsersInChat',
       id: Math.random(),
       userNumber: usersInChat
     });

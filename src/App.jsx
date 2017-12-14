@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import MessageList from "./MessageList.jsx";
 import ChatBar from "./ChatBar.jsx";
+import NavBar from "./NavBar.jsx";
 
 // Cannot pass props to grandchildren -- React limitation/"feature"
 
@@ -10,7 +11,8 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: "Anon"},
-      messages: []
+      messages: [],
+      usersInChat: 0
     }
     this.changeName = this.changeName.bind(this);
   }
@@ -29,12 +31,16 @@ class App extends Component {
 
 
   componentDidMount() {
-    this.socket = new WebSocket("ws://localhost:3001");
+    this.socket = new WebSocket('ws://localhost:3001');
       this.socket.onmessage = (message) => {
       const newMessage = JSON.parse(message.data);
-      const messages = this.state.messages.concat(newMessage)
-      console.log("componentDidMount");
-      this.setState({messages: messages})
+      if (newMessage.type == 'updateUsersInChat') {
+        this.setState({usersInChat: newMessage.userNumber});
+        console.log("Users in chat", newMessage.userNumber);
+      } else {
+        const messages = this.state.messages.concat(newMessage)
+        this.setState({messages: messages})
+      }
     }
   }
 
@@ -55,9 +61,7 @@ class App extends Component {
     console.log("Rendering App.jsx");
     return (
       <div>
-        <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
-        </nav>
+        <NavBar usersInChat={this.state.usersInChat}/>
         <MessageList
           messages={this.state.messages}
         />
