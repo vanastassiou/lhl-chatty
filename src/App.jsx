@@ -1,16 +1,16 @@
-import React, {Component} from "react";
-import MessageList from "./MessageList.jsx";
-import ChatBar from "./ChatBar.jsx";
-import NavBar from "./NavBar.jsx";
+import React, {Component} from 'react';
+import MessageList from './MessageList.jsx';
+import ChatBar from './ChatBar.jsx';
+import NavBar from './NavBar.jsx';
 
-// Cannot pass props to grandchildren -- React limitation/"feature"
+// Cannot pass props to grandchildren -- React limitation/'feature'
 
 class App extends Component {
 
   constructor(props)  {
     super(props);
     this.state = {
-      currentUser: {name: "Anon"},
+      currentUser: {name: 'Anon'},
       messages: [],
       usersInChat: 0
     }
@@ -25,7 +25,6 @@ class App extends Component {
       content: userInput,
       type: 'postMessage'
     };
-    console.log("New message handler:", newMessage.content);
     this.socket.send(JSON.stringify(newMessage));
   }
 
@@ -36,7 +35,6 @@ class App extends Component {
       const newMessage = JSON.parse(message.data);
       if (newMessage.type == 'updateUsersInChat') {
         this.setState({usersInChat: newMessage.userNumber});
-        console.log("Users in chat", newMessage.userNumber);
       } else {
         const messages = this.state.messages.concat(newMessage)
         this.setState({messages: messages})
@@ -51,14 +49,12 @@ class App extends Component {
       content: `${this.state.currentUser.name} is now known as ${newName}`
       };
     this.socket.send(JSON.stringify(notification));
-    console.log("Changing name to", newName);
     this.setState({
       currentUser: {name: newName}
     })
   }
 
   render() {
-    console.log("Rendering App.jsx");
     return (
       <div>
         <NavBar usersInChat={this.state.usersInChat}/>

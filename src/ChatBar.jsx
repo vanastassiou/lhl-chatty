@@ -1,16 +1,16 @@
-import React, {Component} from "react";
+import React, {Component} from 'react';
 
 class ChatBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        username: "",
-        content: ""
+        username: '',
+        content: ''
     }
   }
 
   enterMessage(input) {
-    if (input.key == "Enter") {
+    if (input.key == 'Enter') {
       this.props.onNewMessage(input.target.value);
     }
   }
@@ -23,11 +23,11 @@ class ChatBar extends Component {
   }
 
   render() {
-    console.log("Rendering ChatBar.jsx");
+    console.log('Rendering ChatBar.jsx');
     return (
-      <footer className="chatbar">
-        <input className="chatbar-username" placeholder={this.props.username.name} onBlur={this.onUsernameChange}/>
-        <input className="chatbar-message" onKeyPress={this.enterMessage.bind(this)} placeholder="Type a message and hit ENTER" />
+      <footer className='chatbar'>
+        <input className='chatbar-username' placeholder={this.props.username.name} onBlur={this.onUsernameChange}/>
+        <input className='chatbar-message' onKeyPress={this.enterMessage.bind(this)} placeholder='Type a message and hit ENTER' />
       </footer>
     )
   }
