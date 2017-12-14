@@ -1,15 +1,38 @@
 const express = require('express');
-const SocketServer = require('ws').Server;
+const WebSocket = require('ws');
+const SocketServer = WebSocket.Server;
 const PORT = 3001;
 
 const server = express()
   .use(express.static('public'))
   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
+
 const wss = new SocketServer({ server });
+let usersInChat = 0;
+let serverResponse = {
+  type: 'updateUsersInChat',
+  userNumber: usersInChat
+};
 
+// Client connection handler
 
-wss.on("connection", function connection(ws) {
-  console.log("Client connected.");
+wss.on('connection', function connection(ws) {
+  console.log('Client connected.');
+  usersInChat += 1;
+  broadcastServerMessage({
+    type: 'updateUsersInChat',
+    userNumber: usersInChat
+  });
+
+  ws.on('close', function connection(ws) {
+    console.log('Client disconnected');
+    usersInChat -= 1;
+    broadcastServerMessage({
+      type: 'updateUsersInChat',
+      userNumber: usersInChat
+    });
+  });
+
   // Event listener
   ws.on("message", function(data) {
     console.log(data);
@@ -25,13 +48,15 @@ wss.on("connection", function connection(ws) {
       console.log(`User ${notification.username} said: \"${notification.content}\"`);
     } else if (notification.type === 'postNotification') {
       console.log(notification.content);
-    }
-
-    let chatroomNotice = JSON.stringify(serverResponse);
-    wss.clients.forEach(function each(client) {
-      if (client.readyState === ws.OPEN) {
-        client.send(chatroomNotice);
-      }
-    });
+    };
   });
 });
+
+function broadcastServerMessage(serverResponse) {
+  let chatroomNotice = JSON.stringify(serverResponse);
+  wss.clients.forEach(function each(client) {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(chatroomNotice);
+    }
+  });
+};
