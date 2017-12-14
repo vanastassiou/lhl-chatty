@@ -15,5 +15,5 @@ new WebpackDevServer(webpack(config), {
       console.log(err);
     }
 
-    console.log('Chatterbox server running at http://0.0.0.0:3000');
+    console.log('Chatty server running at http://0.0.0.0:3000');
   });
